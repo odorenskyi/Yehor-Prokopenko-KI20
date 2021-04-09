@@ -2,6 +2,7 @@
 #include <wchar.h>
 #include <iomanip>
 #include "modulesprokopenko.h"
+#include <limits>
 using namespace std;
 
 
@@ -25,6 +26,9 @@ double validator(wstring number){
 }
 
 double hexS_calculation(wstring x,wstring y, wstring z){
+    // If the function with the given parameters does not exist, then 0 will be returned
+    if(validator(y) == false)
+        return 0;
     return s_calculation(validator(x),validator(y),validator(z));
 }
 
@@ -32,7 +36,7 @@ int main(){
     consoleToUtf8();
     wcout << devInfo();
     wstring x = L"",y = L"",z = L"";
-   wchar_t  a = L' ', b = L' ';
+    wchar_t  a = L' ', b = L' ';
     wcout <<L"Введіть дійсне число x: ";
     wcin >> x;
     wcout <<L"Введіть дійсне число y: ";
@@ -41,6 +45,8 @@ int main(){
     wcin >> z;
     wcout <<L"Введіть символ a: ";
     wcin >> a;
+    cin.clear();
+    wcin.ignore(numeric_limits < streamsize > ::max(), '\n');
     wcout <<L"Введіть символ b: ";
     wcin >> b;
     wcout << boolalpha << L"Результат логічного виразу: "<<aBCondition(a,b) << endl;
