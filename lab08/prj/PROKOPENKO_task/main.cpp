@@ -27,8 +27,6 @@ double validator(wstring number){
 
 double hexS_calculation(wstring x,wstring y, wstring z){
     // If the function with the given parameters does not exist, then 0 will be returned
-    if(validator(y) == false)
-        return 0;
     return s_calculation(validator(x),validator(y),validator(z));
 }
 
@@ -39,8 +37,12 @@ int main(){
     wchar_t  a = L' ', b = L' ';
     wcout <<L"Введіть дійсне число x: ";
     wcin >> x;
-    wcout <<L"Введіть дійсне число y: ";
-    wcin >> y;
+    do {
+        wcout <<L"Введіть дійсне число y: ";
+        wcin >> y;
+        if (validator(y) == 0)
+            wcout << L"Введіть значення \"У\" ще раз (y≠0)." << endl;
+    } while (validator(y) == 0);
     wcout <<L"Введіть дійсне число z: ";
     wcin >> z;
     wcout <<L"Введіть символ a: ";
