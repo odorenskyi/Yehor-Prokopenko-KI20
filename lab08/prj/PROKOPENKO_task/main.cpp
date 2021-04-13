@@ -12,13 +12,13 @@ bool aBCondition( wchar_t a,wchar_t b){
 }
 
 double validator(wstring number){
-    for( int i = 0; number[i] != L'\n';i++)
+    for( int i = 0; i < (int)number.size();i++)
         if(number[i] == L'.')
             number[i] = L',';
     if (number[0] == L'x' || number[0] == 'X')
         number = L"0" + number;
     // if the variable is an "inadequate" string of type "0bred56" then the function will return 0
-    return std::stof(number);
+    return std::stod(number);
 }
 
 double hexS_calculation(wstring x,wstring y, wstring z){
@@ -34,8 +34,8 @@ int main(){
     wcin >> x;
     wcout <<L" Х у десятковій системі числення: "<< defaultfloat << validator(x)<< endl;
 
-    if(validator(x)  == floor(validator(x))){
-        wcout<<L" Х у шіснадцятковій системі числення: 0x"<< hex << (int)validator(x) << defaultfloat<< endl;
+    if(fmod(validator(x),1) == 0){
+        wcout<<L" Х у шіснадцятковій системі числення: 0x"<< dec << hex  << (int)floor(validator(x)) << defaultfloat<< endl;
     }else{
         wcout<<L" Х у шіснадцятковій системі числення: "<< hexfloat << validator(x) << defaultfloat<< endl;
     }
@@ -47,8 +47,8 @@ int main(){
     } while (validator(y) == 0);
     wcout <<L" У у десятковій системі числення: " << defaultfloat << validator(y)<< endl;
 
-    if(validator(y)  == floor(validator(y))){
-        wcout<<L" У у шіснадцятковій системі числення: 0x"<< hex << (int)validator(y) << defaultfloat<< endl;
+    if(fmod(validator(y),1) == 0){
+        wcout<<L" У у шіснадцятковій системі числення: 0x"<< hex << (int)floor(validator(y)) << defaultfloat<< endl;
     }else{
         wcout<<L" У у шіснадцятковій системі числення: "<< hexfloat << validator(y) << defaultfloat<< endl;
     }
@@ -56,8 +56,8 @@ int main(){
     wcout <<L"Введіть дійсне число z: ";
     wcin >> z;
     wcout <<L" Z у десятковій системі числення: " <<validator(z)<< endl;
-    if(validator(z)  == floor(validator(z))){
-        wcout<<L" Z у шіснадцятковій системі числення: 0x"<< hex << (int)validator(z) << defaultfloat<< endl;
+    if(fmod(validator(z),1) == 0){
+        wcout<<L" Z у шіснадцятковій системі числення: 0x"<< hex << (int)floor(validator(z)) << defaultfloat<< endl;
     }else{
         wcout<<L" Z у шіснадцятковій системі числення: "<< hexfloat << validator(z) << defaultfloat<< endl;
     }
