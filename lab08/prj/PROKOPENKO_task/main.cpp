@@ -65,7 +65,7 @@ int main(){
 
     wcout <<L"Введіть символ a: ";
     wcin >> a;
-    cin.clear();
+    wcin.clear();
     wcin.ignore(numeric_limits < streamsize > ::max(), '\n');
     wcout <<L"Введіть символ b: ";
     wcin >> b;
