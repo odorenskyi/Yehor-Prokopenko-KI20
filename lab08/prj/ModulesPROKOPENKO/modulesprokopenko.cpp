@@ -120,7 +120,7 @@ int task9_3(int N){
                 flag = true;
             }
         if (flag){
-            if((N>>1)&1){
+            if((N>>2)&1){
                 result += ((N>>n)&1)? 1 : 0;
             }else{
                 result += ((N>>n)&1)? 0 : 1;
