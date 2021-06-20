@@ -23,4 +23,10 @@ int task9_3(int N);
 struct forTask9_1 task9_1(char ball);
 struct forTask9_2 task9_2(int n, int m);
 std::wstring devInfo();
+
+errno_t task10_1(const std::string inputFileName = "input.txt",const std::string outputFileName = "output.txt" );
+errno_t task10_2(const std::string inputFileName = "input.txt");
+errno_t task10_3(float x, float y, float z , unsigned int b, const std::string outputFileName = "output.txt");
+
+
 #endif // MODULESPROKOPENKO_H

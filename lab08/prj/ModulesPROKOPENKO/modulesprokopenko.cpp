@@ -7,6 +7,8 @@
 #include <wchar.h>
 #include <locale.h>
 #include <limits>
+#include <fstream>
+#include <ctime>
 
 forTask9_1 task9_1( char ball ){
     struct forTask9_1 result;
@@ -88,17 +90,17 @@ forTask9_2 task9_2(int n, int m)
 {
     forTask9_2 result;
     if(m < 0){
-       result.nPowM += 1/(pow(n,abs(m)));
+        result.nPowM += 1/(pow(n,abs(m)));
     }else{
-       result.nPowM = pow(n,m);
+        result.nPowM = pow(n,m);
     }
     if(n < 0){
-       result.mPowN += 1/pow(m,abs(n));
+        result.mPowN += 1/pow(m,abs(n));
     }else{
-       result.mPowN = pow(m,n);
+        result.mPowN = pow(m,n);
     }
-
-
+    
+    
     if ( n < m ){
         for ( int i = n; i <= m; i++)
             if (abs(i % 2) == 1)
@@ -131,9 +133,9 @@ int task9_3(int N){
 }
 
 std::wstring devInfo(){
-    std::wstring info = L"╔══════════════════════════════════════════════════════╗\n"
-                         "║Виконав студент групи КБ20 Прокопенко Єгор Сергійович©║\n"
-                         "╚══════════════════════════════════════════════════════╝\n";
+    std::wstring info = L"╔════════════════════════════════════════════════════════════════════╗\n"
+                         "║Розробник: Прокопенко Єгор Сергійович, ЦНТУ, м. Кропивницький, 2021©║\n"
+                         "╚════════════════════════════════════════════════════════════════════╝\n";
     return info;
 }
 
@@ -143,3 +145,164 @@ void clearWcin(){
     std::wcin.ignore(std::numeric_limits < std::streamsize > :: max(), '\n');
 }
 
+
+errno_t task10_1(std::string inputFileName,  std::string outputFileName)
+{
+    std::wstring str = L"";
+    std::wifstream inFile(inputFileName);
+    if(inFile.is_open()){
+        if(!inFile.eof()){
+            getline(inFile,str);
+        }
+        inFile.close();
+        
+    }else{
+        return 1; // Can`t open input file
+    }
+    
+    std::wofstream outFile(outputFileName);
+    if(outFile.is_open()){
+        outFile << devInfo();
+        
+        std::wstring vignettes = L"\'\".,;:~`!-?[]{}ЁёЪъэЭ"; // 0..14 punctuation marks
+        bool ukranianword = true;
+        int letterInWord = 0;
+        for(int i = 0; i < int(str.length()); i++){
+            if (ukranianword){
+                if( (str[i] < L'А' || str[i] > L'я' ) && (str[i] !=L'і' &&  str[i] !=L'І')){
+                    ukranianword = false;
+                    letterInWord = 0;
+
+                    std::wofstream inFile(inputFileName,std::ios::app);
+                    if(inFile.is_open()){
+                        for(char j = 0; j < int(vignettes.length());j++){
+                            if(i == 0 && str[i] == vignettes[j] && int(str.length()) == 1 && j < 16 ){
+                                outFile << L"У вхідному файлі є тільки один знак пунктуації!"<<std::endl;
+                                inFile << L"\nХай щастить!"<<std::endl;
+                                break;
+
+                            }else{
+                                if(j+1 == 16 || int(str.length()) > 1){
+                                    inFile << L"\nПерший космонавт України: Каденюк Леонід Костянтинович"<<std::endl;
+                                    break;
+                                }
+                            }
+                        }
+                        inFile.close();
+                    }else{
+                        return 2; // Can`t open output file
+                    }
+                    break;
+                }
+            }else{
+                break;
+            }
+            if(ukranianword){
+                letterInWord += 1;
+            }
+        }
+        if(letterInWord > 0){
+            std::wstring  wordsInPoem  = L"ХАЙ ЩАСТИТЬ У ВАШІЙ ХАТІ, МАМО,"
+                                         L"ВСІМ, ХТО ПЕРЕСТУПІТЬ ВАШ ПОРІГ:"
+                                         L"ДОБРИМ ЛЮДЯМ, І ПТАХАМ ТАК САМО,"
+                                         L"І КОТОВІ, ЩО В ТЕПЛІ ПРИЛІГ;"
+                                         L"ХАЙ ЩАСТИТЬ КОЖНЕНЬКІЙ ДЕРЕВИНІ,"
+                                         L"ЩО ДО ХАТИ ВІТИ ПРИТУЛЯ,"
+                                         L"ХАЙ ЩАСТИТЬ МАЛЕСЕНЬКІЙ ТРАВИНІ"
+                                         L"Й ВІТЕРЦЮ, ЩО ПРИЛІТА ЗДАЛЯ.";
+            
+            
+            outFile << L"Кількість літер у слові \" " << str << " \" : " << std::to_wstring(letterInWord) << std::endl;
+            std::wstring word = L"";
+            
+            
+            for(int i = 0; i < int(str.length()); i++)
+                if(str[i] >= L'а' && str[i] <= L'я'){
+                    str[i] =  str[i] +  L'А' - L'а';
+                }else{
+                    if(str[i] == L'і')
+                        str[i] = L'І';
+                }
+            
+            for(int i = 0; i < int(wordsInPoem.length()); i++){
+                if((wordsInPoem[i] >= L'А' && wordsInPoem[i] <= L'Я')  || wordsInPoem[i] == L'І'){
+                    word += wordsInPoem[i];
+                }else{
+                    if(str == word){
+                        
+                        outFile << L"Введене слово є у вірші А. Тарана \"Хай щастить у Вашій хаті, Мамо!\"" << std::endl;;
+                        break;
+                    }else{
+                        if(i+1 == int(wordsInPoem.length())){
+                            outFile << L"Введого слова  немає у вірші А. Тарана \"Хай щастить у Вашій хаті, Мамо!\"" << std::endl; ;
+                        }
+                        word = L"";
+                    }
+                }
+            }
+        }else{
+            outFile << L"У вхідному файлі немає Українського Слова!!!"<< std::endl;
+        }
+        
+        outFile.close();
+    }else{
+        return 2; // can`t open output file
+    }
+    return 0;
+}
+
+
+
+errno_t task10_2( std::string inputFileName)
+{
+    std::wofstream inFile(inputFileName,std::ios::app);
+    if(inFile.is_open()){
+        std::wstring poem = L"Хай щастить у Вашій хаті, мамо,\n"
+                            L"Всім, хто переступіть Ваш поріг:\n"
+                            L"Добрим людям, і птахам так само,\n"
+                            L"І котові, що в теплі приліг;\n"
+                            L"Хай щастить кожненькій деревині,\n"
+                            L"Що до хати віти притуля,\n"
+                            L"Хай щастить малесенькій травині\n"
+                            L"Й вітерцю, що приліта здаля.\n"
+                            L"Ви завжди за всіх були дбайливі -\n"
+                            L"Бо така ж та доля у вдови."
+                            L"Бо ж як будуть всі навкруг щасливі,\n"
+                            L"То щасливі будете і Ви.\n";
+        inFile << std::endl << L"Вірш А.Тарана \"Хай щастить у Вашій хаті, мамо!\":\n" <<  poem << std::endl;
+        time_t times = std::time(nullptr);
+        inFile << L"Час дозапису :"  << std::asctime (std::localtime( &times ))<< std::endl;
+        inFile.close();
+        
+    }else{
+        return 1; // Can`t open input file
+    }
+
+    
+    return 0;
+}
+
+
+
+
+errno_t task10_3(float x, float y, float z , unsigned int b, std::string outputFileName)
+{
+    std::wofstream outFile(outputFileName,std::ios::app);
+    if(outFile.is_open()){
+        bool flag = false;
+        outFile << L"Результат роботи модулю s_calculation: " << s_calculation(x,y,z) << std::endl;
+        outFile << L"Число "  << b << L" у двійковому коді: ";
+        for(int i = sizeof(unsigned int)-1; i > -1; i--){
+            if(!flag && (b>>i)&1)
+                flag = true;
+            
+            if(flag)
+                outFile << ((b>>i)&1);
+        }
+        outFile << std::endl;
+    }else{
+        return 2;
+    }
+    outFile.close();
+    return 0;
+}
