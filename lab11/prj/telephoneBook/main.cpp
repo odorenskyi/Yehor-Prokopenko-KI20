@@ -6,6 +6,12 @@ using namespace std;
 
 
 void greenTextInConsole(){
+    HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_FONT_INFOEX cfie;
+    ZeroMemory(&cfie, sizeof(cfie));
+    cfie.cbSize = sizeof(cfie);
+    lstrcpyW(cfie.FaceName, L"Lucida Console");
+    SetCurrentConsoleFontEx(hStdOut, false, &cfie);
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
     HANDLE hwnd = GetStdHandle(STD_OUTPUT_HANDLE);
